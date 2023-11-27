@@ -131,10 +131,14 @@ public class MainGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 HistoricoDAO historicoDAO = new HistoricoDAO();
-                double imc = historicoDAO.getAllFromCPF(cpf.getText()).getLast().getPeso() / (Math.pow(historicoDAO.getAllFromCPF(cpf.getText()).getLast().getAltura(), 2));
-                if (!cpf.getText().isEmpty()) {
+                if (!cpf.getText().isEmpty() && !historicoDAO.getAllFromCPF(cpf.getText()).isEmpty()) {
+                    double imc = historicoDAO.getAllFromCPF(cpf.getText()).getLast().getPeso() / (Math.pow(historicoDAO.getAllFromCPF(cpf.getText()).getLast().getAltura(), 2));
                     historicoDAO.getAllFromCPF(cpf.getText()).getLast().calcularIMC();
                     JOptionPane.showMessageDialog(null, "IMC: " + historicoDAO.getAllFromCPF(cpf.getText()).getLast().resultadoIMC(imc));
+                } else if (!cpf.getText().isEmpty() &&historicoDAO.getAllFromCPF(cpf.getText()).isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Nenhum aluno com esse CPF encontrado");
+                } else {
+                    JOptionPane.showMessageDialog(null,"Insira um CPF para consultar o IMC");
                 }
             }
         });
