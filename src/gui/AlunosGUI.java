@@ -12,13 +12,13 @@ public class AlunosGUI extends JFrame {
     private JPanel painel;
     private JTable alunos;
     private JButton voltarButton;
-    private DefaultTableModel modelo = new DefaultTableModel();
+    private final DefaultTableModel modelo = new DefaultTableModel();
 
 
-    public AlunosGUI(){
+    public AlunosGUI() {
         setContentPane(painel);
         setVisible(true);
-        setSize(600,300);
+        setSize(600, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         HistoricoDAO historicoDAO = new HistoricoDAO();
@@ -32,7 +32,11 @@ public class AlunosGUI extends JFrame {
         });
     }
 
-    public void createTable(){
+    public static void main(String[] args) {
+        new AlunosGUI();
+    }
+
+    public void createTable() {
         modelo.addColumn("CPF");
         modelo.addColumn("NOME");
         modelo.addColumn("NASCIMENTO");
@@ -42,9 +46,5 @@ public class AlunosGUI extends JFrame {
 
         AlunoDAO alunoDAO = new AlunoDAO();
         alunoDAO.getAll().forEach(aluno -> aluno.addLinha(modelo));
-    }
-
-    public static void main(String[] args) {
-        new AlunosGUI();
     }
 }

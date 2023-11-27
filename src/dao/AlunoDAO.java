@@ -2,7 +2,6 @@ package dao;
 
 import factory.ConnectionFactory;
 import modelo.Aluno;
-import modelo.HistoricoPeso;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,14 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlunoDAO {
-    private Connection connection;
-    public AlunoDAO(){
+    private final Connection connection;
+
+    public AlunoDAO() {
         this.connection = new ConnectionFactory().getConnection();
     }
 
     public void add(Aluno aluno) throws SQLException {
         String sql = "INSERT INTO alunos(cpf, nome, dataNascimento, peso, altura) VALUES (?, ?, ?, ?, ?)";
-        try{
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, aluno.getCpf());
@@ -29,15 +29,14 @@ public class AlunoDAO {
             statement.setDouble(5, aluno.getAltura());
             statement.execute();
             statement.close();
-        }
-        catch (SQLException u){
+        } catch (SQLException u) {
             throw new RuntimeException(u);
         }
     }
 
-    public void update(Aluno aluno) throws SQLException{
+    public void update(Aluno aluno) throws SQLException {
         String sql = "UPDATE alunos SET nome = ?, dataNascimento = ?, peso = ?, altura = ? WHERE cpf = ?";
-        try{
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, aluno.getNome());
@@ -47,55 +46,52 @@ public class AlunoDAO {
             statement.setString(5, aluno.getCpf());
             statement.execute();
             statement.close();
-        }
-        catch (SQLException u){
+        } catch (SQLException u) {
             throw new RuntimeException(u);
         }
     }
 
-    public void delete(String cpf) throws SQLException{
+    public void delete(String cpf) throws SQLException {
         String sql = "DELETE FROM alunos WHERE cpf=?";
-        try{
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, cpf);
             statement.execute();
             statement.close();
-        }
-        catch (SQLException u){
+        } catch (SQLException u) {
             throw new RuntimeException(u);
         }
     }
-    public List<Aluno> getAll(){
+
+    public List<Aluno> getAll() {
         List<Aluno> registros = new ArrayList<Aluno>();
         String sql = "SELECT * FROM alunos";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet resultSet = stmt.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Aluno aluno = new Aluno(resultSet.getString("cpf"), resultSet.getString("nome"), resultSet.getString("dataNascimento"), resultSet.getDouble("peso"), resultSet.getDouble("altura"));
                 registros.add(aluno);
             }
             return registros;
-        }
-        catch (SQLException u) {
+        } catch (SQLException u) {
             throw new RuntimeException(u);
         }
     }
 
-    public List<Aluno> getAllFromCPF(String cpf){
+    public List<Aluno> getAllFromCPF(String cpf) {
         List<Aluno> registros = new ArrayList<Aluno>();
         String sql = "SELECT * FROM alunos WHERE cpf=?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setString(1,cpf);
+            stmt.setString(1, cpf);
             ResultSet resultSet = stmt.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Aluno aluno = new Aluno(resultSet.getString("cpf"), resultSet.getString("nome"), resultSet.getString("dataNascimento"), resultSet.getDouble("peso"), resultSet.getDouble("altura"));
                 registros.add(aluno);
             }
             return registros;
-        }
-        catch (SQLException u) {
+        } catch (SQLException u) {
             throw new RuntimeException(u);
         }
     }

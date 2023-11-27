@@ -1,8 +1,6 @@
 package modelo;
 
 import javax.swing.table.DefaultTableModel;
-import java.time.LocalDate;
-import java.util.Date;
 
 public class Aluno {
     String cpf;
@@ -10,6 +8,7 @@ public class Aluno {
     String dataNascimento;
     double peso;
     double altura;
+
     public Aluno(String cpf, String nome, String dataNascimento, double peso, double altura) {
         this.cpf = cpf;
         this.nome = nome;
@@ -57,11 +56,12 @@ public class Aluno {
     public void setAltura(double altura) {
         this.altura = altura;
     }
-    public void print(){
-        System.out.println(getCpf()+" "+getNome()+" "+getDataNascimento()+" "+getPeso()+"kg "+getAltura()+"m");
+
+    public void print() {
+        System.out.println(getCpf() + " " + getNome() + " " + getDataNascimento() + " " + getPeso() + "kg " + getAltura() + "m");
     }
 
-    public void addLinha(DefaultTableModel model){
+    public void addLinha(DefaultTableModel model) {
         model.addRow((new Object[]{
                 getCpf(),
                 getNome(),
