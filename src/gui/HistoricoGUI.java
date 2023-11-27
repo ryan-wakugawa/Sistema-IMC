@@ -1,5 +1,6 @@
 package gui;
 
+import dao.AlunoDAO;
 import dao.HistoricoDAO;
 
 import javax.swing.*;
@@ -11,6 +12,9 @@ public class HistoricoGUI extends JFrame {
     private JTable historico;
     private JPanel painel;
     private JButton voltarButton;
+    private JTextField buscaCPF;
+    private JButton buscarButton;
+    private JButton resetButton;
     private final DefaultTableModel modelo = new DefaultTableModel();
 
     public HistoricoGUI() {
@@ -26,6 +30,24 @@ public class HistoricoGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 new MainGUI();
                 dispose();
+            }
+        });
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HistoricoDAO historicoDAO = new HistoricoDAO();
+                modelo.setRowCount(0);
+                historicoDAO.getAllFromCPF(buscaCPF.getText()).forEach(historicoPeso -> historicoPeso.addLinha(modelo));
+                historico.repaint();
+            }
+        });
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                HistoricoDAO historicoDAO = new HistoricoDAO();
+                modelo.setRowCount(0);
+                historicoDAO.getAll().forEach(historicoPeso -> historicoPeso.addLinha(modelo));
+                historico.repaint();
             }
         });
     }

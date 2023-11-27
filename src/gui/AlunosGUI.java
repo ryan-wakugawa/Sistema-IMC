@@ -12,6 +12,9 @@ public class AlunosGUI extends JFrame {
     private JPanel painel;
     private JTable alunos;
     private JButton voltarButton;
+    private JTextField buscaCPF;
+    private JButton buscarButton;
+    private JButton resetButton;
     private final DefaultTableModel modelo = new DefaultTableModel();
 
 
@@ -28,6 +31,24 @@ public class AlunosGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 new MainGUI();
                 dispose();
+            }
+        });
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlunoDAO alunoDAO = new AlunoDAO();
+                modelo.setRowCount(0);
+                alunoDAO.getAllFromCPF(buscaCPF.getText()).forEach(aluno -> aluno.addLinha(modelo));
+                alunos.repaint();
+            }
+        });
+        resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AlunoDAO alunoDAO = new AlunoDAO();
+                modelo.setRowCount(0);
+                alunoDAO.getAll().forEach(aluno -> aluno.addLinha(modelo));
+                alunos.repaint();
             }
         });
     }

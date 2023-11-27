@@ -77,13 +77,12 @@ public class MainGUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
                 } else {
                     Aluno aluno = new Aluno(cpf.getText(), nome.getText(), nascimento.getText(), Double.parseDouble(peso.getText()), Double.parseDouble(altura.getText()));
-                    AlunoDAO dao = new AlunoDAO();
+                    AlunoDAO alunoDAO = new AlunoDAO();
                     HistoricoPeso historicoPeso = new HistoricoPeso(cpf.getText(), nome.getText(), Double.parseDouble(peso.getText()), Double.parseDouble(altura.getText()), "" + LocalDate.now());
                     HistoricoDAO histDAO = new HistoricoDAO();
                     try {
-                        dao.update(aluno);
+                        alunoDAO.update(aluno);
                         histDAO.add(historicoPeso);
-                        historicoPeso.calcularIMC();
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class HistoricoPeso {
     String cpf;
@@ -80,9 +82,10 @@ public class HistoricoPeso {
         File txt = new File(nome + LocalDate.now() + ".txt");
         double imc = peso / Math.pow(altura, 2);
         String resultado = resultadoIMC(imc);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
         try {
-            FileWriter writer = new FileWriter(nome + LocalDate.now() + ".txt");
-            writer.write("CPF: " + cpf + " Nome: " + nome + " IMC: " + String.format("%.2f", imc) + " Resultado: " + resultado + " Dia: " + LocalDate.now());
+            FileWriter writer = new FileWriter(nome + dtf.format(LocalDateTime.now()) + ".txt");
+            writer.write("CPF: " + cpf + " / Nome: " + nome + " / IMC: " + String.format("%.2f", imc) + " / Resultado: " + resultado + " / Dia: " + getData());
             writer.close();
         } catch (IOException e) {
             System.out.println("Ocorreu um erro.");
