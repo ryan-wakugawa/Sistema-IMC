@@ -34,6 +34,17 @@ public class HistoricoDAO {
             throw new RuntimeException(u);
         }
     }
+    public void delete(String cpf){
+        String sql = "DELETE FROM historico WHERE cpf=?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, cpf);
+            statement.execute();
+            statement.close();
+        } catch (SQLException u) {
+            throw new RuntimeException(u);
+        }
+    }
 
     public List<HistoricoPeso> getAll() {
         List<HistoricoPeso> registros = new ArrayList<HistoricoPeso>();

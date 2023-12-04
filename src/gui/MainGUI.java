@@ -28,30 +28,20 @@ public class MainGUI extends JFrame {
     public MainGUI() {
         setContentPane(MainPanel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(450, 300);
         setVisible(true);
-
-        //Máscara do CPF
-        /*MaskFormatter maskCpf = null;
-        try {
-            maskCpf = new MaskFormatter("###.###.###-##");
-            maskCpf.setPlaceholderCharacter('_');
-        } catch (ParseException e) {
-            System.err.println("Erro na formatação: " + e.getMessage());
-            System.exit(-1);
-        }
-        JFormattedTextField cpf = new JFormattedTextField(maskCpf);
-         */
 
         cadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                AlunoDAO dao = new AlunoDAO();
+
                 if (nome.getText().isEmpty() || cpf.getText().isEmpty() || peso.getText().isEmpty() || altura.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+                } else if (!dao.getAllFromCPF(cpf.getText()).isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Já existe um aluno com esse CPF");
                 } else {
                     Aluno aluno = new Aluno(cpf.getText(), nome.getText(), nascimento.getText(), Double.parseDouble(peso.getText()), Double.parseDouble(altura.getText()));
-                    AlunoDAO dao = new AlunoDAO();
-
                     HistoricoPeso historicoPeso = new HistoricoPeso(cpf.getText(), nome.getText(), Double.parseDouble(peso.getText()), Double.parseDouble(altura.getText()), "" + LocalDate.now());
                     HistoricoDAO histDAO = new HistoricoDAO();
                     try {
@@ -60,6 +50,8 @@ public class MainGUI extends JFrame {
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
+
+                    historicoPeso.calcularIMC();
 
                     cpf.setText("");
                     nome.setText("");
@@ -99,10 +91,12 @@ public class MainGUI extends JFrame {
         deletarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!cpf.getText().isEmpty() && cpf.getText().length() == 11) {
-                    AlunoDAO dao = new AlunoDAO();
+                AlunoDAO alunoDAO = new AlunoDAO();
+                HistoricoDAO historicoDAO = new HistoricoDAO();
+                if (!cpf.getText().isEmpty() && !alunoDAO.getAllFromCPF(cpf.getText()).isEmpty()) {
                     try {
-                        dao.delete(cpf.getText());
+                        alunoDAO.delete(cpf.getText());
+                        historicoDAO.delete(cpf.getText());
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -112,7 +106,7 @@ public class MainGUI extends JFrame {
                     nascimento.setText("");
                     peso.setText("");
                     altura.setText("");
-                } else if (cpf.getText().length() != 11 && !cpf.getText().isEmpty()) {
+                } else if (cpf.getText().length() != 11 && !alunoDAO.getAllFromCPF(cpf.getText()).isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Digite um CPF valido");
                 } else {
                     JOptionPane.showMessageDialog(null, "Digite um CPF para deletar o usuário correspondente.");

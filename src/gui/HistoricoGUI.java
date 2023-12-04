@@ -51,22 +51,6 @@ public class HistoricoGUI extends JFrame {
             }
         });
     }
-
-    /*
-        historico.("Data");
-        modelo.addColumn("Usuario");
-        modelo.addColumn("Descrição");
-
-    // Adiciona os registros a tabela
-        for (Registro reg : registroDAO.getAll()) {
-        modelo.addRow(new Object[]{
-                reg.getData(),
-                usuarioDAO.getById(reg.getIdUsuario()).getUsuario(),
-                reg.getDescricao()
-        });
-
-    }
-    */
     public static void main(String[] args) {
         new HistoricoGUI();
     }
